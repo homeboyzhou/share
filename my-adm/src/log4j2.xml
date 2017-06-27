@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="5">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{2}(%F:%L) - %m%n" />
+        </Console>
+
+        <RollingFile name="fixedTimeFileAppender" fileName="${sys:index.log.home}/efs-adm.log"
+            filePattern="${sys:index.log.home}/efs-adm.log.%d{yyyy-MM-dd}.%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{1}(%L) - %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1024 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="512" />
+        </RollingFile>
+
+        <RollingFile name="appMonitorFixedTimeFileAppender" fileName="${sys:index.log.home}/efs-adm-appmonitor.log"
+            filePattern="${sys:index.log.home}/efs-adm-appmonitor.log.%d{yyyy-MM-dd}.%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{1}(%F:%L) - %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1024 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="512" />
+        </RollingFile>
+
+        <RollingFile name="myBatisFileAppender" fileName="${sys:index.log.home}/mybatis.log"
+            filePattern="${sys:index.log.home}/mybatis.log.%d{yyyy-MM-dd}.%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{2}(%L) - %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1024 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="512" />
+        </RollingFile>
+
+        <RollingFile name="rmbFixedTimeFileAppender" fileName="${sys:index.log.home}/rmb.log"
+            filePattern="${sys:index.log.home}/rmb.log.%d{yyyy-MM-dd}.%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %C{1}(%L) - %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1024 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="512" />
+        </RollingFile>
+
+<!--         <RollingFile name="wemqFileAppender" fileName="${sys:index.log.home}/wemq-client.log" -->
+<!--             filePattern="${sys:index.log.home}/wemq-client.log.%d{yyyy-MM-dd}.%i.log.gz"> -->
+<!--             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %C{1}(%L) - %m%n" /> -->
+<!--             <Policies> -->
+<!--                 <TimeBasedTriggeringPolicy /> -->
+<!--                 <SizeBasedTriggeringPolicy size="1024 MB" /> -->
+<!--             </Policies> -->
+<!--             <DefaultRolloverStrategy max="512" /> -->
+<!--         </RollingFile> -->
+
+<!--         <RollingFile name="logserverFileAppender" fileName="${sys:index.log.home}/logserver.log" -->
+<!--             filePattern="${sys:index.log.home}/logserver.log.%d{yyyy-MM-dd}.%i.log.gz"> -->
+<!--             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %C{1}(%L) - %m%n" /> -->
+<!--             <Policies> -->
+<!--                 <TimeBasedTriggeringPolicy /> -->
+<!--                 <SizeBasedTriggeringPolicy size="1024 MB" /> -->
+<!--             </Policies> -->
+<!--             <DefaultRolloverStrategy max="512" /> -->
+<!--         </RollingFile> -->
+
+<!--         <Async name="logserver" bufferSize="512" includeLocation="true"> -->
+<!--             <AppenderRef ref="logserverFileAppender" /> -->
+<!--         </Async> -->
+
+<!--         <Async name="wemq" bufferSize="512" includeLocation="true"> -->
+<!--             <AppenderRef ref="wemqFileAppender" /> -->
+<!--         </Async> -->
+
+        <Async name="async" bufferSize="512" includeLocation="true">
+            <AppenderRef ref="fixedTimeFileAppender" />
+        </Async>
+
+        <Async name="asyncAppMonitor" bufferSize="512">
+            <AppenderRef ref="appMonitorFixedTimeFileAppender" />
+        </Async>
+
+        <Async name="myBatis" bufferSize="512" includeLocation="true">
+            <AppenderRef ref="myBatisFileAppender" />
+        </Async>
+
+        <Async name="asyncRmb" bufferSize="512" includeLocation="true">
+            <AppenderRef ref="rmbFixedTimeFileAppender" />
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Logger name="cn.webank" level="info" additivity="false">
+            <AppenderRef ref="async" />
+        </Logger>
+
+<!--         <Logger name="cn.webank.rmb" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="wemq" /> -->
+<!--         </Logger> -->
+
+<!--         <Logger name="cn.webank.wemq" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="wemq" /> -->
+<!--         </Logger> -->
+
+<!--         <Logger name="WemqClient" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="wemq" /> -->
+<!--         </Logger> -->
+
+<!--         <Logger name="WemqRemoting" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="wemq" /> -->
+<!--         </Logger> -->
+
+<!--         <Logger name="WemqCommon" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="wemq" /> -->
+<!--         </Logger> -->
+
+<!--         <Logger name="cn.webank.logserver" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="logserver" /> -->
+<!--         </Logger> -->
+
+        <Logger name="appMonitor" level="info" additivity="false">
+            <AppenderRef ref="asyncAppMonitor" />
+        </Logger>
+
+        <Logger name="org.apache.ibatis" level="warn" additivity="false">
+            <AppenderRef ref="myBatis" />
+        </Logger>
+
+        <Logger name="org.mybatis" level="warn" additivity="false">
+            <AppenderRef ref="myBatis" />
+        </Logger>
+
+        <Logger name="rmbLog" level="info" additivity="false">
+            <AppenderRef ref="asyncRmb" />
+        </Logger>
+        <Logger name="cn.webank.efs.adm.dao" level="debug" additivity="false">
+            <AppenderRef ref="myBatis" />
+        </Logger>
+
+        <!-- Druid 线程池统计(INFO)、慢查询(ERROR)监控输出 -->
+        <logger name="com.alibaba.druid" level="warn" additivity="false">
+            <appender-ref ref="myBatis" />
+        </logger>
+
+        <Root level="info">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>
